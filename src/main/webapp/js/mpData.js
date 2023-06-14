@@ -28,7 +28,14 @@ function getRuntimeRequest() {
     };
     req.open("GET", url, true);
     req.send();
+}
 
+function displayLibertyUptime() {
+    updateLibertyUptime();
+    setInterval(updateLibertyUptime, 1000);
+}
+
+function updateLibertyUptime() {
     url = location.origin + "/system/config/uptime";
     var uptimeReq = new XMLHttpRequest();
 
@@ -36,9 +43,10 @@ function getRuntimeRequest() {
         if (uptimeReq.status === 200) {
             var uptime = JSON.parse(uptimeReq.responseText);
             var appTitle = document.getElementById("uptime");
-            if (!appTitle.innerText.endsWith("s.")) {
-                appTitle.innerText = appTitle.innerText + " " + Math.floor((uptime.uptime/1000)) + "s.";
-            }
+            var newTitle = appTitle.innerText;
+            newTitle = newTitle.substring(0, newTitle.indexOf("!") + 1)
+            newTitle = newTitle + " Available for " + Math.floor((uptime.uptime/1000)) + "s.";
+            appTitle.innerText = newTitle;
         }
     };
     uptimeReq.open("GET", url, true);
