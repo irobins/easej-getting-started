@@ -11,6 +11,8 @@
 
 package io.openliberty.sample.config;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.core.MediaType;
 
@@ -23,6 +25,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 import org.eclipse.microprofile.config.Config;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.config.spi.ConfigSource;
 
 @RequestScoped
@@ -31,6 +34,9 @@ public class ConfigResource {
 
   @Inject
   private Config config;
+  @Inject
+  @ConfigProperty(name = "kernel.launch.time")
+  private long bootTime;
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
@@ -38,6 +44,16 @@ public class ConfigResource {
     JsonObjectBuilder builder = Json.createObjectBuilder();
     return builder.add("ConfigSources", sourceJsonBuilder())
                   .add("ConfigProperties", propertyJsonBuilder()).build();
+  }
+
+  @GET
+  @Path("uptime")
+  @Produces(MediaType.APPLICATION_JSON)
+  public JsonObject getUptime() {
+    JsonObjectBuilder builder = Json.createObjectBuilder();
+    long uptime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - bootTime);
+    return builder.add("uptime", uptime).build();
+
   }
 
   public JsonObject sourceJsonBuilder() {

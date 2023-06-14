@@ -28,6 +28,21 @@ function getRuntimeRequest() {
     };
     req.open("GET", url, true);
     req.send();
+
+    url = location.origin + "/system/config/uptime";
+    var uptimeReq = new XMLHttpRequest();
+
+    uptimeReq.onreadystatechange = function () {
+        if (uptimeReq.status === 200) {
+            var uptime = JSON.parse(uptimeReq.responseText);
+            var appTitle = document.getElementById("uptime");
+            if (!appTitle.innerText.endsWith("s.")) {
+                appTitle.innerText = appTitle.innerText + " " + Math.floor((uptime.uptime/1000)) + "s.";
+            }
+        }
+    };
+    uptimeReq.open("GET", url, true);
+    uptimeReq.send();
 }
 
 function displayMetrics() {
