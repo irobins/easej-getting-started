@@ -9,6 +9,7 @@ The sample application contains a system microservice to retrieve the system pro
     http://localhost:9080
 ![image](https://user-images.githubusercontent.com/3076261/117993383-4f34c980-b305-11eb-94b5-fa7319bc2850.png)
 
+Trigger Rebuild 20 June 10:44pm
 Trigger Rebuild 20 June 10:26pm
 Trigger Rebuild 20 June 9:50pm
 Trigger Rebuild 20 June 6:09pm
