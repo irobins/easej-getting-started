@@ -9,23 +9,4 @@ The sample application contains a system microservice to retrieve the system pro
     http://localhost:9080
 ![image](https://user-images.githubusercontent.com/3076261/117993383-4f34c980-b305-11eb-94b5-fa7319bc2850.png)
 
-Trigger Rebuild 20 June 10:44pm
-Trigger Rebuild 20 June 10:26pm
-Trigger Rebuild 20 June 9:50pm
-Trigger Rebuild 20 June 6:09pm
-Trigger Rebuild 20 June 5:57pm
-Trigger Rebuild 20 June 10:02am
-Trigger Rebuild 20 June 9:46am
-Trigger Rebuild 20 June 9:36am
-Trigger Rebuild 20 June 9:27am
-Trigger Rebuild 20 June 9:11am
-Trigger Rebuild 16 June 8:19am
-Trigger Rebuild 15 June 12:50pm
-Trigger Rebuild 15 June 10:50am
-Trigger Rebuild 15 June 10:13am
-Trigger Rebuild 14 June 10:14am
-Trigger Rebuild 14 June 8:57am
-Trigger Rebuild 13 June 5:18pm
-Trigger Rebuild 13 June 5:09pm
-Trigger Rebuild 13 June 5:06pm
-Trigger Rebuild 13 June 4:58pm
+Trigger build 21 June 10:57am
