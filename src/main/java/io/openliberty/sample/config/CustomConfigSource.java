@@ -49,6 +49,7 @@ public class CustomConfigSource implements ConfigSource {
 
   public Map<String, String> getProperties() {
     Map<String, String> m = new HashMap<String, String>();
+    m.put("config_ordinal", "550");
     /**
     String jsonData = this.readFile(this.fileLocation);
     JsonParser parser = Json.createParser(new StringReader(jsonData));
