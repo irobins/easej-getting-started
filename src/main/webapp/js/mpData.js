@@ -45,7 +45,50 @@ function updateLibertyUptime() {
             var appTitle = document.getElementById("uptime");
             var newTitle = appTitle.innerText;
             newTitle = newTitle.substring(0, newTitle.indexOf("!") + 1)
-            newTitle = newTitle + " Available for " + Math.floor((uptime.uptime/1000)) + "s.";
+
+            var totalSeconds = Math.floor(uptime.uptime / 1000);
+
+            var hours = Math.floor( totalSeconds / 3600);
+            var minutes = Math.floor( totalSeconds % 3600 / 60);
+            var seconds = Math.floor( totalSeconds % 3600 % 60);
+
+            var days = 0;
+
+            if (hours > 24) {
+                days = Math.floor ( hours / 24 );
+                hours = Math.floor ( hours % 24 );
+            }
+
+            var display = "";
+            var separator = "";
+
+            if (days > 0) {
+                display += days + " days";
+                separator = ", ";
+            }
+
+            if (hours > 0) {
+                display += separator + hours + " hour";
+                if (hours != 1) {
+                    display += "s";
+                }
+                separator = ", ";
+            }
+
+            if (minutes > 0) {
+                display += separator + minutes + " min";
+                if (minutes != 1) {
+                    display += "s";
+                }
+                separator = ", ";
+            }
+
+            display += separator + seconds + " sec";
+            if (seconds != 1) {
+                display += "s";
+            }
+
+            newTitle = newTitle + " Available for " + display + ".";
             appTitle.innerText = newTitle;
         }
     };
