@@ -40,7 +40,7 @@ function updateLibertyUptime() {
     var uptimeReq = new XMLHttpRequest();
 
     uptimeReq.onreadystatechange = function () {
-        if (uptimeReq.status === 200) {
+        if (uptimeReq.readyState == XMLHttpRequest.DONE && uptimeReq.status === 200) {
             var uptime = JSON.parse(uptimeReq.responseText);
             var appTitle = document.getElementById("uptime");
             var newTitle = appTitle.innerText;
@@ -54,7 +54,7 @@ function updateLibertyUptime() {
 
             var days = 0;
 
-            if (hours > 24) {
+            if (hours > 23) {
                 days = Math.floor ( hours / 24 );
                 hours = Math.floor ( hours % 24 );
             }
