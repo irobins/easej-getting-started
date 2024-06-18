@@ -8,27 +8,7 @@
 * Contributors:
 *     IBM Corporation - initial API and implementation
 *******************************************************************************/
-function displayLibertyVersion() {
-    getRuntimeRequest();
-}
 
-function getRuntimeRequest() {
-    var url = location.origin + "/system/runtime";
-    var req = new XMLHttpRequest();
-    var table = document.getElementById("systemPropertiesTable");
-
-    req.onreadystatechange = function () {
-        if (req.status === 200) {
-            var version = req.responseText;
-            if (version != "") {
-                var appTitle = document.getElementById("appTitle");
-                appTitle.innerText = "Open Liberty " + version + " - Getting Started Sample";
-            }
-        }
-    };
-    req.open("GET", url, true);
-    req.send();
-}
 
 function displayLibertyUptime() {
     updateLibertyUptime();
@@ -96,78 +76,6 @@ function updateLibertyUptime() {
     uptimeReq.send();
 }
 
-function displayMetrics() {
-    getSystemMetrics();
-}
-
-function getSystemMetrics() {
-    var url = location.origin + "/metrics";
-    var req = new XMLHttpRequest();
-
-    var metricToDisplay = {};
-    var SRgetPropertiesTime = "application_io_openliberty_sample_system_SystemResource_getPropertiesTime";
-    metricToDisplay["application_getProperties_total"] = "Request Count";
-    metricToDisplay[SRgetPropertiesTime + "_min_seconds"] = "Min Request Time (ms)";
-    metricToDisplay[SRgetPropertiesTime + "_mean_seconds"] = "Mean Request Time (ms)";
-    metricToDisplay[SRgetPropertiesTime + "_max_seconds"] = "Max Request Time (ms)";
-    metricToDisplay["base_cpu_processCpuLoad_percent"] = "System CPU Usage (%)";
-    metricToDisplay["base_memory_usedHeap_bytes"] = "System Heap Usage (MB)";
-
-    var metricToMatch = "^(";
-    for (var metricKey in metricToDisplay) {
-        metricToMatch += metricKey + "|"
-    }
-    // remove the last |
-    metricToMatch = metricToMatch.substring(0, metricToMatch.length - 1);
-    metricToMatch += ")\\s*(\\S*)$"
-
-    req.onreadystatechange = function () {
-        if (req.readyState != 4) return; // Not there yet
-        if (req.status != 200) {
-            document.getElementById("metricsText").innerHTML = req.statusText;
-            return;
-        }
-
-        var resp = req.responseText;
-        var regexpToMatch = new RegExp(metricToMatch, "gm");
-        var matchMetrics = resp.match(regexpToMatch);
-
-        var keyValPairs = {};
-        for (var metricKey in metricToDisplay) {
-            matchMetrics.forEach(function (line) {
-                var keyToMatch = metricKey + " (.*)";
-                var keyVal = line.match(new RegExp(keyToMatch));
-                if (keyVal) {
-                    var val = keyVal[1];
-                    if (metricKey.indexOf(SRgetPropertiesTime) === 0) {
-                        val = val * 1000;
-                    } else if (metricKey.indexOf("base_memory_usedHeap_bytes") === 0) {
-                        val = val / 1000000;
-                    }
-                    keyValPairs[metricToDisplay[metricKey]] = val;
-                }
-            })
-        }
-
-        var table = document.getElementById("metricsTableBody");
-        for (key in keyValPairs) {
-            var row = document.createElement("tr");
-            var keyData = document.createElement("td");
-            keyData.innerText = key;
-            var valueData = document.createElement("td");
-            valueData.innerText = keyValPairs[key];
-            row.appendChild(keyData);
-            row.appendChild(valueData);
-            table.appendChild(row);
-        }
-
-        addSourceRow(table, location.origin + "/metrics");
-    };
-
-    req.open("GET", url, true);
-    req.send();
-}
-
 function displaySystemProperties() {
     getSystemPropertiesRequest();
 }
@@ -180,7 +88,6 @@ function getSystemPropertiesRequest() {
     // Create the callback:
     req.onreadystatechange = function () {
         if (req.readyState != 4) return; // Not there yet
-        displayMetrics();
         if (req.status != 200) {
             table.innerHTML = "";
             var row = document.createElement("tr");
@@ -207,48 +114,6 @@ function getSystemPropertiesRequest() {
                 table.appendChild(row);
             }
         }
-
-        addSourceRow(table, url);
-    };
-    req.open("GET", url, true);
-    req.send();
-}
-
-function displayHealth() {
-    getHealth();
-}
-
-function getHealth() {
-    var url = location.origin + "/health";
-    var req = new XMLHttpRequest();
-
-    var healthBox = document.getElementById("healthBox");
-    var serviceName = document.getElementById("serviceName");
-    var healthStatus = document.getElementById("serviceStatus");
-    var healthIcon = document.getElementById("healthStatusIconImage");
-
-    req.onreadystatechange = function () {
-        if (req.readyState != 4) return; // Not there yet
-
-        // Request successful, read the response
-        if (req.responseText) {
-            var resp = JSON.parse(req.responseText);
-            var service = resp.checks[0]; //TODO: use for loop for multiple services
-
-            resp.checks.forEach(function (service) {
-                serviceName.innerText = service.name;
-                healthStatus.innerText = service.status;
-
-                if (service.status === "UP") {
-                    healthBox.style.backgroundColor = "#f0f7e1";
-                    healthIcon.setAttribute("src", "img/systemUp.svg");
-                } else {
-                    healthBox.style.backgroundColor = "#fef7f2";
-                    healthIcon.setAttribute("src", "img/systemDown.svg");
-                }
-            });
-        }
-        var table = document.getElementById("healthTable");
 
         addSourceRow(table, url);
     };
